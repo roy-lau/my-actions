@@ -27,4 +27,5 @@ jobs:
           subject: 天气预报 Report (${{env.REPORT_DATE}})
           html_body: file://result.html
           to: 897379293@qq.com
+          cc: 710347627@qq.com
           from: GitHub Actions
