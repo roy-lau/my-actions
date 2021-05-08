@@ -1,3 +1,3 @@
-# 我的 github actions 集
+# github actions 定时发送天气预报
 
-1. 定时发送天气预报
+参考 https://github.com/ruanyf/weather-action
