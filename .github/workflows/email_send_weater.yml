@@ -22,10 +22,10 @@ jobs:
         with:
           server_address: smtp.163.com
           server_port: 465
+          secure: true
           username: 13526636962@163.com
           password: ${{ secrets.EMAIL163_PWD }}
           subject: 天气预报 Report (${{env.REPORT_DATE}})
           html_body: file://result.html
           to: 897379293@qq.com
           from: GitHub Actions
-          attachments: attachments.zip,git.diff
