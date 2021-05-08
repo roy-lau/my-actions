@@ -1,3 +1,5 @@
+# 参考 https://github.com/ruanyf/weather-action
+
 name: 'GitHub Actions Weather Bot'
 
 on:
@@ -21,7 +23,7 @@ jobs:
           server_address: smtp.163.com
           server_port: 465
           username: 13526636962@163.com
-          password: ${{ secrets.email163_pwd }}
+          password: ${{ secrets.EMAIL163_PWD }}
           subject: 天气预报 Report (${{env.REPORT_DATE}})
           body: file://result.html
           to: 897379293@qq.com
