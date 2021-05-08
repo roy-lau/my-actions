@@ -28,3 +28,4 @@ jobs:
           html_body: file://result.html
           to: 897379293@qq.com
           from: GitHub Actions
+          attachments: attachments.zip,git.diff
