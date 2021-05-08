@@ -25,7 +25,6 @@ jobs:
           username: 13526636962@163.com
           password: ${{ secrets.EMAIL163_PWD }}
           subject: 天气预报 Report (${{env.REPORT_DATE}})
-          body: file://result.html
+          html_body: file://result.html
           to: 897379293@qq.com
           from: GitHub Actions
-          content_type: text/html
