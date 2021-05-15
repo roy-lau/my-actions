@@ -1,0 +1,21 @@
+{
+  "name": "github-green",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "current": "node index.js -s 20160101 -e 20211001 -l 5 -m 5 -b action-green"
+  },
+  "bin": {
+    "github-green": "index.js"
+  },
+  "author": "RoyLau",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^2.20.0",
+    "cross-spawn": "^6.0.5",
+    "dayjs": "^1.10.4",
+    "fs-extra": "^7.0.1"
+  }
+}

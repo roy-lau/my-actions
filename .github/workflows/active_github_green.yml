@@ -1,0 +1,24 @@
+name: active github green bot
+
+on:
+  push:    
+    branches: action-green
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: config gitbash # 配置 gitbash
+        run: |
+          git config --local user.email "22829291+roy-lau@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+      - uses: actions/setup-node@v2 # 使用 nodejs v12
+        with:
+          node-version: 12
+      - run: npm i && npm run current # 运行 nodejs 代码，生成 commits
+      - name: git push
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: action-auto-commits # 没有此分支将会自动创建分支
