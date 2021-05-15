@@ -16,14 +16,12 @@ jobs:
 #       - name: 'Get Weather'
 #         run: bash ./weather.sh
       - name: 'Set env'
-#         run: echo "REPORT_DATE=$(TZ=':Asia/Shanghai' date '+%Y-%m-%d %T')" >> $GITHUB_ENV
         env:
           REPORT_DATE: date '+%Y-%m-%d %T'
-          CITY: 北京天气
+          CITY: 北京市
           LANGUAGE: "zh-CN"
-          UNIT: m
           UA: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36"
-        run: curl -H "Accept-Language:$LANGUAGE" -H "User-Agent:$UA" -o result.html wttr.in/$CITY?format=4$UNIT
+        run: curl -H "Accept-Language:$LANGUAGE" -H "User-Agent:$UA" -o result.html wttr.in/$CITY
       - name: 'Send mail'
         uses: dawidd6/action-send-mail@master
         with:
@@ -31,7 +29,7 @@ jobs:
           server_port: 465
           username: 13526636962@163.com
           password: ${{ secrets.EMAIL163_PWD }}
-          subject: 天气预报 Report (${{env.REPORT_DATE}})
+          subject: 天气预报 Report ( $REPORT_DATE )
           html_body: file://result.html
           to: 897379293@qq.com
           cc: 710347627@qq.com
