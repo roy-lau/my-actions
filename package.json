@@ -1,0 +1,25 @@
+{
+  "name": "action-jd-sign",
+  "version": "1.0.0",
+  "description": "京东签到",
+  "main": "jd_sign.js",
+  "scripts": {
+    "start": "node jd_sign.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/roy-lau/my-actions.git"
+  },
+  "author": "roy-lau",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/roy-lau/my-actions/issues"
+  },
+  "homepage": "https://github.com/roy-lau/my-actions#readme",
+  "dependencies": {
+    "download": "^8.0.0",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6"
+  }
+}
