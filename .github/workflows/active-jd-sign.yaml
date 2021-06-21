@@ -1,6 +1,7 @@
 name: active-jd-sign
 
 on:
+  workflow_dispatch:
   push:
     branches: action-jd-sign
   schedule:
