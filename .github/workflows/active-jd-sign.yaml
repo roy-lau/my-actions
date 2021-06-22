@@ -5,9 +5,8 @@ on:
   push:
     branches: action-jd-sign
   schedule:
-    - cron: '0 20 * * *'
+  - cron: '0 20 * * *'
   watch:
-    branches: action-jd-sign
     types: started
     
 env:
