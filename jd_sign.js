@@ -1,6 +1,6 @@
 // version v0.0.1
-// create by zhihua
-// detail url: https://github.com/ruicky/jd_sign_bot
+// create by roylau
+// detail url: https://github.com/roy-lau/my-actions
 
 const exec = require('child_process').execSync
 const fs = require('fs')
@@ -92,7 +92,7 @@ function sendNotificationIfNeed() {
   let SCKEY = push_key.replace(/[\r\n]/g, "")
 
   const options = {
-    uri: `https://sctapi.ftqq.com/${SCKEY}.send`,
+    uri: `https://sct.ftqq.com/${SCKEY}.send`,
     form: { text, desp },
     json: true,
     method: 'POST'
