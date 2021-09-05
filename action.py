@@ -82,7 +82,7 @@ class Push:
 
     # Server Chan Turbo Push
     def server_chan_push(self, arg):
-        url = "https://sct.ftqq.com/%s.send" % arg[0]
+        url = "https://sctapi.ftqq.com/%s.send" % arg[0]
         headers = {"Content-type": "application/x-www-form-urlencoded"}
         content = {"title": "网易云打卡", "desp": self.text}
         ret = requests.post(url, headers=headers, data=content)
