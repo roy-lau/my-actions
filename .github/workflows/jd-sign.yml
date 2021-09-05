@@ -1,13 +1,11 @@
-name: active-js-sign
+name: 京东签到
 
 on:
   schedule:
     - cron: '0 20 * * *'
   workflow_dispatch:
-#   push:
-#     branches: action-jd-sign
-  watch:
-    types: started
+  # watch:
+  #   types: started
 
 env:
   JD_COOKIE: ${{ secrets.JD_COOKIE }}
