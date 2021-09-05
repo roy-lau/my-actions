@@ -1,0 +1,43 @@
+name: active-js-sign
+
+on:
+  schedule:
+    - cron: '0 20 * * *'
+  workflow_dispatch:
+#   push:
+#     branches: action-jd-sign
+  watch:
+    types: started
+
+env:
+  JD_COOKIE: ${{ secrets.JD_COOKIE }}
+  PUSH_KEY: ${{ secrets.PUSH_KEY }}
+  UPLOAD_BESULT_DIR: true
+
+jobs:
+    build-jd-sign:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout codes
+              uses: actions/checkout@v2
+              with:
+                ref: 'action-jd-sign' # ***重点*** 切换到此分支
+              
+            - name: Use Node.js
+              uses: actions/setup-node@v1
+              with:
+                node-version: '12.x'
+                
+            - name: 安装依赖
+              run: npm install
+              
+            - name: 运行脚本
+              run: node jd_sign.js
+                
+            - name: Upload result file
+              uses: actions/upload-artifact@master
+              if: env.UPLOAD_BESULT_DIR == 'true'
+              with:
+                name: result
+                path: ./*.txt
