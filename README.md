@@ -1,8 +1,6 @@
-# CloudMusic-LevelUp
+# 网易云音乐飞升
 
 > 网易云音乐刷歌升级脚本，欢迎提 issue 和 requests 帮助增强脚本功能。
->
-> [项目 GitHub 地址](https://github.com/Secriy/CloudMusic-LevelUp)
 
 ## 脚本功能
 
@@ -81,6 +79,56 @@ python .\action.py 1xx014x4636,2xx011x4226 1xxx2xx324x65fx6xb22846ea8xcx0x7,2xxx
 ```
 
 注意：当*playlist.txt*文件不为空时，脚本不会使用网易云音乐推荐的歌单刷听歌量，仅使用自定义的歌单。
+
+
+## GitHub Actions 部署
+
+### 1. Fork 该仓库
+
+### 2. 创建 Secrets
+
+- 创建 PHONE，填入手机号，多账号以`,`分割（必填）
+- 创建 PASSWORD，填入 32 位 MD5 密码加密值，多账号以`,`分割（与 PASSWORD_PLAIN 字段二选一）
+- 创建 PASSWORD_PLAIN，填入明文密码，多账号以`,`分割（与 PASSWORD 字段二选一）
+- 创建 SC_KEY（Server 酱 SendKey，可选）
+- 创建 TG_BOT_KEY（Telegram 机器人推送参数，以空格分割多个参数，可选）
+- 创建 BARK_KEY（Bark 推送参数，可选）
+- 创建 WECOM_KEY （企业微信推送参数，以空格分割多个参数，可选）
+- 创建 PUSH_PLUS_KEY（pushplus 推送参数，可选）
+
+![](README/image-20201110002853759.png)
+
+### 3. 创建 playlist.txt（如无必要不要使用）
+
+项目默认包含 playlist.txt 文件，填写内容即可，每行一个歌单号。
+
+### 4. 启用 Action
+
+点击 Actions，选择 **I understand my workflows, go ahead and enable them**
+
+**由于 GitHub Actions 的限制，直接 fork 来的仓库不会自动执行！！！**
+
+必须手动修改项目提交上去，最简单的方法就是修改下图的 README.md 文件（右侧有网页端编辑按钮）。
+
+![image-20201022185210937](README/image-20201022185210937.png)
+
+随便修改什么都行，修改完 commit 就可以了。
+
+之后**每天 0 点**会自动执行一次脚本
+
+![](README/image-20200829120815423.png)
+
+![](README/image-20200829120847583.png)
+
+### 5. 手动执行
+
+GitHub 有手动执行的功能，点击下图 Run workflow 即可。
+
+![](README/image-20201022192517489.png)
+
+### 6. 多次执行（可选）
+
+如果觉得每天刷的听歌量达不到要求，可以尝试每天多次执行的解决方案，修改 _.github/workflows/action.yml_ 内的 _cron_ 值为 **"0 4/16 \* \* \*"** ，即在每天的北京时间 0 点和 12 点执行。
 
 ### 消息推送
 
@@ -172,55 +220,6 @@ python action.py 1xx014x4636 1xxx2xx324x65fx6xb22846ea8xcx0x7 -p aaa6aac77dc1111
 python action.py 1xx014x4636 1xxx2xx324x65fx6xb22846ea8xcx0x7 -w [企业ID] [应用ID] [应用Secrets]
 ```
 
-## GitHub Actions 部署
-
-### 1. Fork 该仓库
-
-### 2. 创建 Secrets
-
-- 创建 PHONE，填入手机号，多账号以`,`分割（必填）
-- 创建 PASSWORD，填入 32 位 MD5 密码加密值，多账号以`,`分割（与 PASSWORD_PLAIN 字段二选一）
-- 创建 PASSWORD_PLAIN，填入明文密码，多账号以`,`分割（与 PASSWORD 字段二选一）
-- 创建 SC_KEY（Server 酱 SendKey，可选）
-- 创建 TG_BOT_KEY（Telegram 机器人推送参数，以空格分割多个参数，可选）
-- 创建 BARK_KEY（Bark 推送参数，可选）
-- 创建 WECOM_KEY （企业微信推送参数，以空格分割多个参数，可选）
-- 创建 PUSH_PLUS_KEY（pushplus 推送参数，可选）
-
-![](README/image-20201110002853759.png)
-
-### 3. 创建 playlist.txt（如无必要不要使用）
-
-项目默认包含 playlist.txt 文件，填写内容即可，每行一个歌单号。
-
-### 4. 启用 Action
-
-点击 Actions，选择 **I understand my workflows, go ahead and enable them**
-
-**由于 GitHub Actions 的限制，直接 fork 来的仓库不会自动执行！！！**
-
-必须手动修改项目提交上去，最简单的方法就是修改下图的 README.md 文件（右侧有网页端编辑按钮）。
-
-![image-20201022185210937](README/image-20201022185210937.png)
-
-随便修改什么都行，修改完 commit 就可以了。
-
-之后**每天 0 点**会自动执行一次脚本
-
-![](README/image-20200829120815423.png)
-
-![](README/image-20200829120847583.png)
-
-### 4. 手动执行
-
-GitHub 有手动执行的功能，点击下图 Run workflow 即可。
-
-![](README/image-20201022192517489.png)
-
-### 5. 多次执行（可选）
-
-如果觉得每天刷的听歌量达不到要求，可以尝试每天多次执行的解决方案，修改 _.github/workflows/action.yml_ 内的 _cron_ 值为 **"0 4/16 \* \* \*"** ，即在每天的北京时间 0 点和 12 点执行。
-
 ## 注意事项
 
 - 脚本只支持 Python3 环境
@@ -233,6 +232,9 @@ GitHub 有手动执行的功能，点击下图 Run workflow 即可。
 ## TODO
 
 - 脚本功能太少，今后考虑开发比较实用的新功能
+
+
+参考： [项目 GitHub 地址](https://github.com/Secriy/CloudMusic-LevelUp)
 
 ## 联系方式
 
