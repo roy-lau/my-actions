@@ -1,0 +1,51 @@
+# This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: 掘金自动签到和挖矿
+on:
+  push:
+  schedule:
+    # `分 时 天 月 周` 时按照标准时间 北京时间=标准时间+8 23表示北京时间早上7点
+    - cron: '0 23 * * *'
+
+jobs:
+  check_in:
+    runs-on: ubuntu-latest
+    steps:
+      # 切换分支
+      - name: Checkout
+        uses: actions/checkout@master
+        with:
+          ref: 'action-juejin' # ***重点*** 切换到此分支
+
+      # 使用 node:14
+      - name: 使用 Node.js 14
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      # npm install
+      - name: yarn install
+        run: |
+          yarn install
+        env:
+          CI: true
+
+      # 运行脚本
+      - name: 掘金签到
+        env:
+          COOKIE: ${{ secrets.JUEJIN_COOKIE }}
+          EMAIL_USER: ${{ secrets.EMAIL_163 }}
+          EMAIL_PASS: ${{ secrets.EMAIL163_PWD }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+        run: |
+          yarn checkin
+      - name: 掘金挖矿
+        env:
+          COOKIE: ${{ secrets.JUEJIN_COOKIE }}
+          EMAIL_USER: ${{ secrets.EMAIL_163 }}
+          EMAIL_PASS: ${{ secrets.EMAIL163_PWD }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+        run: |
+          yarn
+          yarn seaGold
