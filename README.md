@@ -30,7 +30,7 @@
 
 | 掘金每日签到 | 海底掘金游戏 |
 |:-----------:| :-------------:|
-| ![掘金每日签到](https://user-images.githubusercontent.com/24502299/150481822-b488d30c-93b6-4d73-9e28-56c04a9413fb.png) | ![海底掘金游戏](https://user-images.githubusercontent.com/24502299/150625136-5649d2fe-b204-40aa-b8b5-7f54a44e018d.png) |
+| ![掘金每日签到](https://user-images.githubusercontent.com/24502299/156475511-342cfcd8-3b66-4b9c-8614-215e0b4e08a1.jpg) | ![海底掘金游戏](https://user-images.githubusercontent.com/24502299/156475550-c8cc459a-3b27-4ca6-a07b-902b65bea7a9.jpg) |
 
 ## 问题
 
@@ -51,6 +51,9 @@ DevTools截图:
 
 [![海底掘金挑战赛](https://user-images.githubusercontent.com/24502299/151397151-0d69998a-2310-4a32-945f-c8e0035ed65d.png)](https://juejin.cn/game/haidijuejin/)
 
+## 赞赏
+### ☕️微信赞赏！鼓励升级！
+<img src="https://user-images.githubusercontent.com/24502299/150144723-863ad914-3849-40df-8857-5ec5cd60cacd.JPG" alt="微信赞赏" width="300" />
 
 ## 许可
 
