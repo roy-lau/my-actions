@@ -176,6 +176,28 @@ class CloudMusic:
             "Referer": "http://music.163.com/",
             "Accept-Encoding": "gzip, deflate",
         }
+        self.proxy = [
+                {
+                        'http': 'http://61.135.217.7:80',
+                        'https': 'http://61.135.217.7:80',
+                    },
+                {
+                        'http': 'http://118.114.77.47:8080',
+                        'https': 'http://118.114.77.47:8080',
+                    },
+                {
+                        'http': 'http://112.114.31.177:808',
+                        'https': 'http://112.114.31.177:808',
+                    },
+                {
+                        'http': 'http://183.159.92.117:18118',
+                        'https': 'http://183.159.92.117:18118',
+                    },
+                {
+                        'http': 'http://110.73.10.186:8123',
+                        'https': 'http://110.73.10.186:8123',
+                    },
+                ]   
 
     def login(self):
         login_url = "https://music.163.com/weapi/login/cellphone"
@@ -187,7 +209,7 @@ class CloudMusic:
             "Cookie": "os=pc; osver=Microsoft-Windows-10-Professional-build-10586-64bit; appver=2.0.3.131777; "
             "channel=netease; __remember_me=true;",
         }
-        res = self.session.post(url=login_url, data=self.login_data, headers=headers)
+        res = self.session.post(url=login_url, data=self.login_data, headers=headers, proxies=random.choice(self.proxy))
         ret = json.loads(res.text)
         if ret["code"] == 200:
             self.csrf = requests.utils.dict_from_cookiejar(res.cookies)["__csrf"]
@@ -205,7 +227,7 @@ class CloudMusic:
     # Get the level of account.
     def get_level(self):
         url = "https://music.163.com/weapi/user/level?csrf_token=" + self.csrf
-        res = self.session.post(url=url, data=self.login_data, headers=self.headers)
+        res = self.session.post(url=url, data=self.login_data, headers=self.headers, proxies=random.choice(self.proxy))
         ret = json.loads(res.text)
         return ret["data"]
 
@@ -220,7 +242,7 @@ class CloudMusic:
 
     def sign(self):
         sign_url = "https://music.163.com/weapi/point/dailyTask?{csrf}".format(csrf=self.csrf)
-        res = self.session.post(url=sign_url, data=self.enc.encrypt('{"type":0}'), headers=self.headers)
+        res = self.session.post(url=sign_url, data=self.enc.encrypt('{"type":0}'), headers=self.headers, proxies=random.choice(self.proxy))
         ret = json.loads(res.text)
         if ret["code"] == 200:
             text = "签到成功，经验+" + str(ret["point"])
@@ -236,7 +258,7 @@ class CloudMusic:
         music_lists = []
         if not playlist:
             res = self.session.post(
-                url=recommend_url, data=self.enc.encrypt('{"csrf_token":"' + self.csrf + '"}'), headers=self.headers
+                url=recommend_url, data=self.enc.encrypt('{"csrf_token":"' + self.csrf + '"}'), headers=self.headers, proxies=random.choice(self.proxy)
             )
             ret = json.loads(res.text)
             if ret["code"] != 200:
@@ -252,6 +274,7 @@ class CloudMusic:
             url=private_url,
             data=self.enc.encrypt(json.dumps({"uid": self.uid, "limit": 1001, "offset": 0, "csrf_token": self.csrf})),
             headers=self.headers,
+            proxies=random.choice(self.proxy),
         )
         pret = json.loads(pres.text)
         if pret["code"] == 200:
@@ -265,6 +288,7 @@ class CloudMusic:
                 url=url,
                 data=self.enc.encrypt(json.dumps({"id": m, "n": 1000, "csrf_token": self.csrf})),
                 headers=self.headers,
+                proxies=random.choice(self.proxy),
             )
             ret = json.loads(res.text)
             for i in ret["playlist"]["tracks"]:
@@ -294,7 +318,7 @@ class CloudMusic:
                 )
             }
         )
-        res = self.session.post(url="http://music.163.com/weapi/feedback/weblog", data=self.enc.encrypt(post_data))
+        res = self.session.post(url="http://music.163.com/weapi/feedback/weblog", data=self.enc.encrypt(post_data), proxies=random.choice(self.proxy))
         ret = json.loads(res.text)
         if ret["code"] == 200:
             text = "刷听歌量成功，共{0}首".format(music_amount)
