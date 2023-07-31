@@ -1,25 +1,41 @@
 {
-  "name": "juejin-helper",
-  "version": "1.5.1",
-  "description": "稀土掘金助手：签到、抽奖、沾喜气、消除Bug、海底掘金游戏、自动化工作流。",
+  "name": "juejin-helper-monorepo",
+  "version": "1.7.3",
+  "private": true,
   "author": "Derek Li",
-  "license": "MIT",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "checkin": "node ./scripts/checkin.js",
-    "lottery": "node ./scripts/lottery.js",
-    "seaGold": "node ./scripts/seaGold.js"
+    "dev": "cross-env NODE_ENV=development rollup -cw",
+    "build": "cross-env NODE_ENV=production rollup -c",
+    "clean": "rimraf \"packages/*/{build,types}\"",
+    "release:version": "lerna version --exact --force-publish",
+    "release:build": "npm run clean && npm run build",
+    "release:publish": "lerna publish from-package --no-private"
   },
-  "dependencies": {
-    "fast-astar": "^1.0.6",
-    "juejin-helper": "^1.5.1",
-    "nodemailer": "^6.7.0"
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^22.0.2",
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "@rollup/plugin-sucrase": "^4.0.4",
+    "@typescript-eslint/parser": "^5.32.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.14.0",
+    "eslint-config-next": "^12.1.5",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "lerna": "^5.4.0",
+    "prettier": "^2.6.2",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.77.2",
+    "rollup-plugin-dts": "^4.2.2",
+    "rollup-plugin-typescript2": "^0.32.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.7.4",
+    "workspaces-run": "^1.0.1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/iDerekLi/juejin-helper.git"
-  },
-  "homepage": "https://github.com/iDerekLi/juejin-helper#readme",
-  "bugs": {
-    "url": "https://github.com/iDerekLi/juejin-helper/issues"
+  "engines": {
+    "node": ">=14.17.0",
+    "npm": ">=6.14.13"
   }
 }

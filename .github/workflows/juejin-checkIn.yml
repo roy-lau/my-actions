@@ -19,17 +19,10 @@ jobs:
           ref: 'action-juejin' # ***重点*** 切换到此分支
 
       # 使用 node:14
-      - name: 使用 Node.js 14
+      - name: 使用 Node.js 18
         uses: actions/setup-node@v3
         with:
-          node-version: 16
-
-      # npm install
-      - name: yarn install
-        run: |
-          yarn install
-        env:
-          CI: true
+          node-version: 18
 
       # 运行脚本
       - name: 掘金签到
@@ -39,13 +32,15 @@ jobs:
           EMAIL_PASS: ${{ secrets.EMAIL163_PWD }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
         run: |
-          yarn checkin
-      - name: 掘金挖矿
-        env:
-          COOKIE: ${{ secrets.JUEJIN_COOKIE }}
-          EMAIL_USER: ${{ secrets.EMAIL_163 }}
-          EMAIL_PASS: ${{ secrets.EMAIL163_PWD }}
-          EMAIL_TO: ${{ secrets.EMAIL_TO }}
-        run: |
+          cd workflows
           yarn
-          yarn seaGold
+          yarn checkin
+      # - name: 掘金挖矿
+      #   env:
+      #     COOKIE: ${{ secrets.JUEJIN_COOKIE }}
+      #     EMAIL_USER: ${{ secrets.EMAIL_163 }}
+      #     EMAIL_PASS: ${{ secrets.EMAIL163_PWD }}
+      #     EMAIL_TO: ${{ secrets.EMAIL_TO }}
+      #   run: |
+      #     yarn
+      #     yarn seaGold

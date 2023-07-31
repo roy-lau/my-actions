@@ -1,11 +1,16 @@
+import notification from "./utils/notification-kit";
 const JuejinHelper = require("juejin-helper");
 const utils = require("./utils/utils");
 const { Grid, Astar } = require("fast-astar");
-const email = require("./utils/email");
 const env = require("./utils/env");
 
-class SeaGold {
+class Seagold {
   gameApi = null;
+  cookie = "";
+
+  constructor(cookie) {
+    this.cookie = cookie;
+  }
 
   nodeRules = [
     { code: 0, hasBounty: false, isWall: false, name: "空地" },
@@ -76,7 +81,7 @@ class SeaGold {
       curPos: gameInfo.curPos,
       blockData: gameInfo.blockData,
       gameDiamond: gameInfo.gameDiamond
-    }
+    };
   }
 
   async gameStart() {
@@ -118,6 +123,9 @@ class SeaGold {
     const curNode = this.getNode(this.gameInfo.curPos);
     const bestNode = this.getBestNode(bmmap);
     const path = this.getRoutePath(bmmap, curNode, bestNode);
+    if (!Array.isArray(path)) {
+      throw new Error(`路径 ${JSON.stringify(path)} 无法在地图 ${JSON.stringify(this.getMaze(bmmap))} 行进.`);
+    }
     const commands = this.getCommands(path);
     if (commands.length <= 0) {
       return false;
@@ -147,10 +155,10 @@ class SeaGold {
 
   getCommands(path) {
     const commands = [];
-    for(let i=0; i<path.length-1; i++) {
-      const cmd = this.getCommand(path[i], path[i+1]);
+    for (let i = 0; i < path.length - 1; i++) {
+      const cmd = this.getCommand(path[i], path[i + 1]);
       if (!cmd) {
-        throw new Error(`路径错误: ${i}->${i+1}`);
+        throw new Error(`路径错误: ${i}->${i + 1}`);
       }
       commands.push(cmd);
     }
@@ -182,21 +190,17 @@ class SeaGold {
     }
 
     const astar = new Astar(maze);
-    const path = astar.search(
-      [startPos.x, startPos.y],
-      [endPos.x, endPos.y],
-      {
-        rightAngle: true,
-        optimalResult: true
-      }
-    );
+    const path = astar.search([startPos.x, startPos.y], [endPos.x, endPos.y], {
+      rightAngle: true,
+      optimalResult: true
+    });
 
     return path;
   }
 
   makeMap(mapData, grid = 6) {
     const map = [];
-    for (let i = 0, y = 0; i < mapData.length; i+=grid, y++) {
+    for (let i = 0, y = 0; i < mapData.length; i += grid, y++) {
       const row = [];
       map.push(row);
       for (let x = 0; x < grid; x++) {
@@ -216,7 +220,7 @@ class SeaGold {
       y,
       isWall: rule.isWall,
       isBest: !!rule.isBest
-    }
+    };
   }
 
   // 获取范围地图
@@ -229,7 +233,8 @@ class SeaGold {
 
     const map = [];
     for (let y = minY; y <= maxY; y++) {
-      const row = []; map.push(row);
+      const row = [];
+      map.push(row);
       for (let x = minX; x <= maxX; x++) {
         row.push(mapData[y][x]);
       }
@@ -278,7 +283,7 @@ class SeaGold {
     map.forEach((row, y) => {
       row.forEach((node, x) => {
         if (node.isWall) {
-          grid.set([x, y], 'value', 1);
+          grid.set([x, y], "value", 1);
         }
       });
     });
@@ -305,7 +310,7 @@ class SeaGold {
 
   async run() {
     const juejin = new JuejinHelper();
-    await juejin.login(env.COOKIE);
+    await juejin.login(this.cookie);
     this.gameApi = juejin.seagold();
 
     const loginInfo = await this.gameApi.gameLogin();
@@ -334,7 +339,7 @@ class SeaGold {
       await this.gameStart();
 
       while (await this.executeGameCommand()) {
-        await utils.wait(utils.randomRangeNumber(1000, 1500));
+        await utils.wait(utils.randomRangeNumber(3000, 5000)); // 等待 3-5s 降低掘金服务器502概率
 
         if (runTime >= runEndTime) {
           throw Error(`掘金游戏异常: 服务运行时间过长.`);
@@ -344,7 +349,7 @@ class SeaGold {
       }
 
       return await this.gameOver();
-    }
+    };
 
     const maxZeroCount = 5;
     let zeroCount = 0;
@@ -365,7 +370,7 @@ class SeaGold {
         throw new Error("掘金游戏异常: 您 0 矿石游戏对局次数过多.");
       }
 
-      await utils.wait(utils.randomRangeNumber(1000, 5000));
+      await utils.wait(utils.randomRangeNumber(5000, 10000)); // 等待 5-10s 降低掘金服务器502概率
       const gameOverInfo = await runGame();
 
       if (gameOverInfo.gameDiamond === 0) {
@@ -380,7 +385,9 @@ class SeaGold {
 
   toString() {
     const userInfo = this.userInfo;
-    const gameLives = this.history.map(game => `${game.gameId}\n  挖取 ${game.gameDiamond}\n  获得 ${game.realDiamond}`).join("\n");
+    const gameLives = this.history
+      .map(game => `${game.gameId}\n  挖取 ${game.gameDiamond}\n  获得 ${game.realDiamond}`)
+      .join("\n");
 
     return `
 掘友: ${userInfo.name}
@@ -392,30 +399,33 @@ ${this.history.length ? `\n游戏记录\n${gameLives}` : ""}
 }
 
 async function run(args) {
-  const seaGold = new SeaGold();
+  const cookies = utils.getUsersCookie(env);
+  const messageList = [];
+  for (let cookie of cookies) {
+    const seaGold = new Seagold(cookie);
 
-  await utils.wait(utils.randomRangeNumber(1000, 5000)); // 初始等待1-5s
+    await utils.wait(utils.randomRangeNumber(3000, 5000)); // 初始等待3-5s
+    await seaGold.run();
 
-  await seaGold.run();
+    const content = seaGold.toString();
+    console.log(content);
 
-  const content = seaGold.toString();
+    messageList.push(content);
+  }
 
-  console.log(content);
-
-  email({
-    subject: "海底掘金游戏",
-    text: content
+  const message = messageList.join(`\n${"-".repeat(15)}\n`);
+  notification.pushMessage({
+    title: "海底掘金游戏",
+    content: message,
+    msgtype: "text"
   });
 }
 
 run(process.argv.splice(2)).catch(error => {
-  email({
-    subject: "海底掘金游戏",
-    html: `
-<strong>Error</strong>
-<pre>${error.message}</pre>
-<div>如果版本过低请前往升级: <a href="https://github.com/iDerekLi/juejin-helper">juejin-helper</a></div>
-`.trim()
+  notification.pushMessage({
+    title: "海底掘金游戏",
+    content: `<strong>Error</strong><pre>${error.message}</pre>`,
+    msgtype: "html"
   });
 
   throw error;
